@@ -39,9 +39,9 @@ function treeSvg(hl, on){
     const p = k.split('/'), par = p.slice(0,-1).join('/'), d = p.length - 2, isOn = pre.has(k) || on === no;
     edge(nx(par), Y[d] + 6, X[k], LY - 10, isOn);
     labs += `<text class="lab${isOn?' on':''}" x="${X[k]}" y="${LY}">${lab}</text>`;
-    lv += `<g class="leaf ${p[0]}${on===no?' on':''}" data-no="${no}"><circle cx="${X[k]}" cy="${CY}" r="11.5"/><text x="${X[k]}" y="${CY}">${no}</text></g>`;
+    lv += `<g class="leaf ${p[0]}${on===no?' on':''}" data-no="${no}"><circle cx="${X[k]}" cy="${CY}" r="13"/><text x="${X[k]}" y="${CY}">${no}</text></g>`;
   });
-  return `<svg class="tree" viewBox="0 0 362 226" role="img" aria-label="탭샵바 12 사다리">${lines}${labs}${lv}</svg>`;
+  return `<svg class="tree" viewBox="0 0 362 228" role="img" aria-label="탭샵바 12 사다리">${lines}${labs}${lv}</svg>`;
 }
 const pathOf = no => (TREE.leaves.find(l => l[1] === no) || [''])[0];
 
@@ -61,7 +61,6 @@ function bindLadder(no){
   const tip = $('#ladtip');
   const show = n => { const x = L.find(y => y.no === n); tip.innerHTML = `<b>${n}번</b> · ${x.ko} <span class="muted" style="color:#7a7378">(${x.en})</span><br>${x.ex}${n===no?' ← <b>이 와인</b>':''}`; };
   $$('.tree .leaf').forEach(c => c.addEventListener('click', () => { $$('.tree .leaf').forEach(z => z.classList.remove('pick')); c.classList.add('pick'); show(+c.dataset.no); }));
-  show(no);
 }
 
 function videoHtml(keys){
@@ -79,7 +78,7 @@ function quiz(w){
   const box = $('#quiz'); let i = 0, score = 0;
   const draw = () => {
     if (i >= w.quiz.length){
-      const msg = score === 3 ? '와인 박사 인정. 직원한테 자랑해도 돼요.' : score === 2 ? '거의 다 왔어요. 한 잔이면 다 외워요.' : '괜찮아요, 그래서 직접 마셔보는 거예요.';
+      const msg = score === 3 ? '와인 박사 인정. 직원한테 자랑해도 돼요.' : score === 2 ? '거의 다 왔어요. 매장에서 라벨 한 번 더 보면 끝.' : '괜찮아요. 번호만 기억하면 돼요.';
       box.innerHTML = `<div class="qres"><b>${score} / ${w.quiz.length}</b><p>${msg}</p><button class="again" id="qre">다시 풀기</button></div>`;
       $('#qre').onclick = () => { i = 0; score = 0; draw(); }; log('nw-quiz-'+score); return;
     }
@@ -102,7 +101,7 @@ function quiz(w){
 function ctaHtml(w){
   return `<section class="sec cta" id="book"><div class="k">RESERVE</div>
     <h2>${esc(w ? w.short : '새 와인')}, 오늘 저녁<br>청계에서 만나요</h2>
-    <p class="muted" style="margin:-6px 0 22px">수량이 적어요. 자리부터 잡아두세요.</p>
+    <p class="muted" style="margin:-6px 0 22px">청계 매대에 몇 병 없어요. 오늘 자리부터.</p>
     <a class="btn" href="${T.naver}" target="_blank" rel="noopener" data-log="nw-naver">예약하러 가기 →</a>
     <div class="ctarow"><a class="btn2" href="tel:${T.tel.replace(/-/g,'')}" data-log="nw-tel">전화하기</a><a class="btn2" href="${T.map}" target="_blank" rel="noopener" data-log="nw-map">길찾기</a></div>
     <a class="btn2" style="margin-top:8px" href="${T.reservation}" target="_blank" rel="noopener" data-log="nw-resv">13명 이상·다른 지점 예약</a>
@@ -149,11 +148,11 @@ function renderWine(id){
     ${w.price ? `<a class="price" href="#price">탭샵바 보틀 <b>${w.price.toLocaleString()}원</b> <span>와인숍보다 싸요 ↓</span></a>` : ''}
   </section>
 
-  <section class="sec reveal"><div class="k">TAP SHOP BAR 12 LADDER</div><h2>와인 이름 몰라도 괜찮아요.<br>번호 하나만 기억하세요</h2>
+  <section class="sec reveal"><div class="k">12 LADDER</div><h2>와인 이름 몰라도 괜찮아요.<br>번호 하나만 기억하세요</h2>
     <p class="ladintro"><b>탭샵바 12 사다리</b>는 매장 와인을 맛에 따라 1번부터 12번까지 나눈 지도예요. <b>색 → 단맛 → 무게 → 향</b>, 사다리 타듯 내려가면 내 번호가 나와요.</p>
     <div class="ladcard"><div class="ladhead"><div class="ladno"><small>이 와인은</small>${w.ladder}</div><div class="what"><b>${esc(lad.ko)}</b><span>${esc(lad.en)}</span></div></div>
-    ${treeSvg(pathOf(w.ladder), w.ladder)}${w.ladderWhy?`<div class="why"><div class="whyh">왜 ${w.ladder}번이냐면</div>${w.ladderWhy.map((x,i)=>`<div><i>${i+1}</i><span>${x}</span></div>`).join('')}</div>`:''}<div class="ladtip" id="ladtip"></div>
-    <div class="ladsrc">번호를 눌러 보세요.</div></div>
+    ${treeSvg(pathOf(w.ladder), w.ladder).replace('class="tree"','class="tree detail"')}${w.ladderWhy?`<div class="why"><div class="whyh">왜 ${w.ladder}번이냐면</div>${w.ladderWhy.map((x,i)=>`<div><i>${i+1}</i><span>${x}</span></div>`).join('')}</div>`:''}<div class="ladtip" id="ladtip"></div>
+    <div class="ladsrc">다른 번호를 눌러 보세요.</div></div>
     <p class="muted s" style="margin-top:14px">${w.ladder}번이 좋았다면, 다음엔 "${w.ladder}번 와인 다른 거요" 라고만 말해 주세요.</p>
   </section>
 
@@ -196,7 +195,7 @@ function renderWine(id){
 function priceHtml(w){
   if (!w.price || !w.shop) return '';
   const k = w.shop.krw, diff = k - w.price, pct = Math.round(diff / k * 100);
-  return `<section class="sec reveal" id="price"><div class="k">PRICE</div><h2>와인숍보다 싸요.<br>그것도 매장에서.</h2>
+  return `<section class="sec reveal" id="price"><div class="k">PRICE</div><h2>집에 사 가는 값보다 싸요.<br>잔은 우리가 닦아요.</h2>
     <div class="pcard">
       <div class="prow"><div class="pl"><b>국내 와인숍</b><span>온라인 판매가 · ${esc(w.shop.note)}</span></div><div class="pv"><b class="strike">${k.toLocaleString()}원</b></div></div>
       <div class="pbar"><b style="--w:100%"></b></div>
@@ -204,7 +203,7 @@ function priceHtml(w){
       <div class="pbar tsb"><b style="--w:${w.price/k*100}%"></b></div>
       <div class="save">${diff.toLocaleString()}원 더 싸요 <span>${pct}%↓</span></div>
     </div>
-    <p class="pnote">사 가서 집에서 마시는 값보다, 탭샵바에 앉아서 마시는 값이 더 싸요.</p>
+    <p class="pnote">온라인에서 사면 ${k.toLocaleString()}원. 청계 테이블에서 열면 ${w.price.toLocaleString()}원. 배송도, 설거지도 없어요.</p>
     <p class="psrc">국내 온라인 와인숍 판매가 ${esc(T.shopDate)} 확인 기준 · 판매처·시점에 따라 달라질 수 있어요</p>
   </section>`;
 }
@@ -214,9 +213,9 @@ function franceHtml(w){
   const line = w.id === 'pomeys'
     ? '포메이는 등급을 잃고도 <em>소송으로 이름을 지켜낸</em> 집이에요.'
     : '샤니에 가문은 <em>270년 넘게</em> 포도밭을 지켜온 집이에요.';
-  return `<section class="sec fr reveal"><div class="k">WHY FRANCE, WHY NOW</div><h2>요즘 프랑스 와인,<br>진짜 힘들대요</h2>
+  return `<section class="sec fr reveal"><div class="k">WHY FRANCE, WHY NOW</div><h2>올해 프랑스,<br>와인이 귀해졌어요</h2>
     <div class="frf">${F.facts.map(f=>`<a href="${f.src}" target="_blank" rel="noopener"><span class="n">${esc(f.n)}</span><span class="t">${esc(f.t)}</span><span class="d">${esc(f.d)} ↗</span></a>`).join('')}</div>
-    <div class="frq">덥고, 안 팔리고, 포도밭이 사라지는 중.<br>그래서 지금 잔에 오는 프랑스 와인은<br><em>버텨낸 집</em>의 와인이에요.</div>
+    <div class="frq">덥고, 안 팔리고, 포도밭이 사라지는 중.<br>그래서 지금 잔에 오는 프랑스 와인은<br><em>버텨낸 집</em>의 와인이에요.<br><span class="frs">포도밭은 줄고, 수확은 적어요. 지금 매대에 있는 병이 다예요.</span></div>
     <p class="muted" style="margin-top:12px">${line}</p>
     <div class="hash">#버틴와인 #지금프랑스 #france</div></section>`;
 }
@@ -226,24 +225,25 @@ function renderHub(){
   const app = $('#app');
   const allTags = ['all','red','white','sparkling','france'];
   const cur = new URLSearchParams(location.search).get('tag') || 'all';
+  if (!allTags.includes(cur)) allTags.push(cur);
   app.innerHTML = `
   ${header(true)}
   <section class="hubtop">
     <span class="badge">NEW IN · 탭샵바 청계</span>
     <h1>새 와인이<br>들어왔어요</h1>
-    <p class="muted">프랑스에서 온 레드 한 병, 화이트 한 병. 사진을 눌러 보세요.</p>
+    <p class="muted">프랑스가 1957년 이후 가장 적게 만든 해, 버텨낸 두 집의 와인이에요.<br>와인숍보다 싸게, 청계에서 바로. 사진을 눌러 보세요.</p>
   </section>
   <div class="filter">${allTags.map(t=>`<button class="tag${t===cur?' on':''}" data-t="${t}">#${t}</button>`).join('')}</div>
-  <div class="duo">${W.map(w=>`<a class="tile ${w.type}" data-tags="${w.tags.join(' ')} ${w.type}" href="${w.id}/" data-log="nw-tile-${w.id}">
+  <div class="duo" id="duo">${W.map(w=>`<a class="tile ${w.type}" data-tags="${w.tags.join(' ')} ${w.type}" href="${w.id}/" data-log="nw-tile-${w.id}">
       <span class="tno">No.${w.ladder}</span>
       <img src="${w.img.replace('../','')}" alt="${esc(w.nameKo)}">
       <span class="tflag"><i><b></b><b></b><b></b></i>${esc(w.regionKo)}</span>
       <span class="tnm">${esc(w.short)}</span>
-      <span class="tsub">${esc(TYPE_KO[w.type])} · ${w.vintage}${w.price?` · ${w.price.toLocaleString()}원`:''}</span>
+      <span class="tsub">${esc(TYPE_KO[w.type])} · ${w.vintage}</span>${w.price?`<span class="tpr">${w.shop?`<s>${w.shop.krw.toLocaleString()}원</s> `:''}<b>${w.price.toLocaleString()}원</b></span>`:''}
       <span class="tgo">보러 가기 →</span></a>`).join('')}</div>
   <div class="empty" id="empty">이 태그의 새 와인은 아직 없어요. 곧 들어와요.</div>
 
-  <section class="sec reveal" style="margin-top:34px"><div class="k">FIND YOUR NUMBER</div><h2>내 와인 번호 찾기</h2><p class="ladintro"><b>탭샵바 12 사다리</b>는 매장 와인을 맛에 따라 1~12번으로 나눈 지도예요. 질문 4개만 고르면 내 번호가 나와요. 와인 이름 몰라도, 번호만 말하면 돼요.</p>
+  <section class="sec reveal" style="margin-top:34px"><div class="k">FIND YOUR NUMBER</div><h2>내 와인 번호 찾기</h2><p class="ladintro"><b>탭샵바 12 사다리</b>는 매장 와인을 맛에 따라 1~12번으로 나눈 지도예요. 질문 2~4개만 고르면 내 번호가 나와요. 와인 이름 몰라도, 번호만 말하면 돼요.</p>
     <div class="finder" id="finder"></div></section>
 
   ${ctaHtml(null)}
@@ -276,7 +276,7 @@ function finder(){
     if (no && !st){
       const x = L.find(y=>y.no===no), m = W.filter(w=>w.ladder===no);
       box.innerHTML = `<div class="fres"><div class="fstep">YOUR NUMBER</div>${rung}<div class="big">${no}</div><div class="lab">${x.ko}</div><div class="ex">${x.ex}</div>
-        <div class="match">${m.length ? `이번에 들어온 새 와인 중 딱 ${no}번이 있어요!${m.map(w=>`<a href="${w.id}/" data-log="nw-finder-${w.id}">${esc(w.nameKo)} 보러 가기 →</a>`).join('')}` : `이번 새 와인 중엔 ${no}번이 없어요. 매장에서 "<b>${no}번 주세요</b>" 라고 말하면 직원이 골라 드려요.<a href="${W[0].id}/">그래도 새 와인 구경하기 →</a>`}</div>
+        <div class="match">${m.length ? `이번에 들어온 새 와인 중 딱 ${no}번이 있어요!${m.map(w=>`<a href="${w.id}/" data-log="nw-finder-${w.id}">${esc(w.nameKo)} 보러 가기 →</a>`).join('')}` : `이번 새 와인은 ${W.map(w=>w.ladder+'번').join('·')}이에요. ${no}번은 매장 탭 와인 64가지 중에 있어요. "<b>${no}번 주세요</b>" 하면 돼요.<a href="#duo">새 와인 두 병 보러 가기 →</a>`}</div>
         <button class="again" id="fre">다시 하기</button></div>`;
       $('#fre').onclick = () => { path = []; draw(); }; log('nw-finder-'+no); return;
     }

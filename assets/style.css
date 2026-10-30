@@ -3,7 +3,7 @@
   --wine:#4A0B18; --wine2:#6E1426; --wine3:#3A0812; --navy:#141B33; --rose:#C9969B; --grey:#8C8790;
   --yellow:#FFC100; --cream:#FFFDFC; --ink:#0E0E0E; --blue:#156DFF; --line:rgba(255,253,252,.14);
   --r:18px;
-  --bg:#3A0812; --fg:#FFFDFC; --fg2:var(--fg2); --card:var(--card); --card2:rgba(0,0,0,.25); --track:var(--track);
+  --bg:#3A0812; --fg:#FFFDFC; --fg2:rgba(255,253,252,.7); --card:rgba(255,253,252,.08); --card2:rgba(0,0,0,.25); --track:rgba(255,253,252,.12);
   --barfill:linear-gradient(90deg,#C9969B,#FFFDFC); --topbg:rgba(58,8,18,.82); --logof:invert(1); --tagon-bg:#FFFDFC; --tagon-fg:#0E0E0E; --k:#C9969B; --hl:#FFC100; --panel:#FFFDFC;
 }
 *{box-sizing:border-box;margin:0;padding:0}
@@ -34,7 +34,7 @@ small,.s{font-size:13px}
 .hero h1{font-size:36px;line-height:1.12;font-weight:850;letter-spacing:-.035em;margin:18px 0 6px;max-width:62%}
 .hero .en{font-size:14px;font-weight:600;opacity:.75;max-width:60%}
 .hero .hook{margin-top:20px;font-size:19px;font-weight:700;line-height:1.4;max-width:58%}
-.hero .bottle{position:absolute;right:-4px;top:70px;height:360px;filter:drop-shadow(0 30px 40px rgba(0,0,0,.55));animation:float 5s ease-in-out infinite}
+.hero .bottle{position:absolute;right:4px;top:70px;height:340px;filter:drop-shadow(0 30px 40px rgba(0,0,0,.55));animation:float 5s ease-in-out infinite}
 @keyframes float{0%,100%{transform:translateY(0) rotate(-2deg)}50%{transform:translateY(-10px) rotate(2deg)}}
 .tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:22px;max-width:62%}
 .tag{font-size:13px;font-weight:700;padding:6px 11px;border-radius:999px;background:var(--card);border:1px solid var(--line);white-space:nowrap}
@@ -199,7 +199,7 @@ footer img{height:14px;filter:var(--logof);opacity:.9}
 
 .reveal{opacity:0;transform:translateY(18px);transition:opacity .7s,transform .7s}
 .reveal.in{opacity:1;transform:none}
-@media (min-width:700px){.hero h1{font-size:46px}.hero .bottle{height:400px;right:10px}}
+@media (min-width:700px){.hero h1{font-size:46px}.hero .bottle{height:380px;right:14px}.hero{min-height:700px}.tile{aspect-ratio:3/4.6}}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 
 .hl{color:var(--hl)}
@@ -279,3 +279,25 @@ body:not(.light) .prow.tsb .pv b{color:var(--yellow)}
 .navfoot{display:grid;gap:8px;padding:28px 22px 6px}
 .navfoot .btn2{text-align:center;color:var(--fg);font-size:15px}
 body.light .navfoot .btn2{background:#fff}
+
+/* ===== Fable 5.1 검수 반영 (v7) ===== */
+.hero{display:flex;flex-direction:column;min-height:626px}
+.hero .facts{margin-top:auto;padding-top:28px}
+.vid .cap{color:#FFFDFC;text-shadow:0 1px 6px rgba(0,0,0,.6)}
+.sticky{left:50%;right:auto;width:100%;max-width:560px;transform:translate(-50%,120%);padding:6px 14px calc(6px + env(safe-area-inset-bottom))}
+.sticky.show{transform:translate(-50%,0)}
+.sticky .btn{padding:13px}
+.save{background:var(--wine);color:var(--cream)}
+.save span{background:var(--yellow);color:var(--ink)}
+.frf .n{color:var(--cream)}
+.ol div i{background:var(--wine);color:#fff}
+.frs{display:block;margin-top:8px;font-size:16px;font-weight:600;color:var(--fg2)}
+.fpath:empty{display:none}
+#ladtip:empty{display:none}
+.tree .lab{font-size:10.5px}
+.tree .leaf text{font-size:12.5px}
+.tree.detail .ln:not(.on){opacity:.5}
+.tree.detail .lab:not(.on){opacity:.65}
+.tpr{font-size:13px;font-weight:600;opacity:.9}
+.tpr s{opacity:.6;font-weight:500}
+.tpr b{font-size:15px;font-weight:900;color:#FFC100}
