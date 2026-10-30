@@ -121,12 +121,24 @@ function wirePage(){
   const sh = $('#share'); if (sh) sh.onclick = async () => { const d = {title:document.title, url:location.href.split('?')[0]}; try{ if (navigator.share) await navigator.share(d); else { await navigator.clipboard.writeText(d.url); sh.textContent='링크 복사됨'; } log('nw-share'); }catch(e){} };
 }
 
+
+const HOME = 'https://tsb.wine/';
+const header = (isHub) => `<header class="top"><button class="back" id="goBack">← 뒤로</button><a href="${HOME}" aria-label="탭샵바 홈페이지"><img src="${isHub?'':'../'}assets/wordmark.png" alt="TAP SHOP BAR"></a><a class="back" href="${HOME}">홈페이지</a></header>`;
+const navFoot = (isHub) => `<nav class="navfoot">${isHub?'':`<a class="btn2" href="../" data-log="nw-nav-hub">← 새 와인 전체 보기</a>`}<a class="btn2" href="${HOME}" data-log="nw-nav-home">탭샵바 홈페이지 →</a><button class="btn2" id="share">이 페이지 공유하기</button></nav>`;
+function bindBack(isHub){
+  const b = document.getElementById('goBack'); if (!b) return;
+  b.onclick = () => {
+    let same = false; try { same = !!document.referrer && new URL(document.referrer).origin === location.origin; } catch(e){}
+    if (same && history.length > 1) history.back(); else location.href = isHub ? HOME : '../';
+  };
+}
+
 /* ========== 와인 상세 ========== */
 function renderWine(id){
   const w = W.find(x => x.id === id); const lad = L.find(x => x.no === w.ladder);
   const app = $('#app');
   app.innerHTML = `
-  <header class="top"><a href="../" class="back">← NEW IN 전체</a><img src="../assets/wordmark.png" alt="TAP SHOP BAR"><button id="share" class="back">공유</button></header>
+  ${header(false)}
   <section class="hero ${w.type}">
     <div class="meta"><span class="badge">NEW IN</span>${flag(w)}</div>
     <h1>${esc(w.nameKo)}</h1><div class="en">${esc(w.nameEn)} ${w.vintage}</div>
@@ -175,8 +187,9 @@ function renderWine(id){
   </section>
 
   ${ctaHtml(w)}
+  ${navFoot(false)}
   ${footer()}${sticky()}`;
-  bindLadder(w.ladder); bindVideos(); quiz(w); wirePage();
+  bindLadder(w.ladder); bindVideos(); quiz(w); wirePage(); bindBack(false);
 }
 
 
@@ -214,25 +227,32 @@ function renderHub(){
   const allTags = ['all','red','white','sparkling','france'];
   const cur = new URLSearchParams(location.search).get('tag') || 'all';
   app.innerHTML = `
-  <header class="top"><a href="https://tsb.wine/" class="back">tsb.wine</a><img src="assets/wordmark.png" alt="TAP SHOP BAR"><button id="share" class="back">공유</button></header>
-  <section class="hubhero"><video src="assets/v/hero.mp4" autoplay muted loop playsinline poster="assets/v/dance.jpg"></video>
-    <div class="ov"><span class="badge" style="align-self:flex-start">NEW IN · 청계</span><h1>새 와인이<br>들어왔어요</h1><p class="muted">프랑스에서 온 레드 한 병, 화이트 한 병.</p></div></section>
+  ${header(true)}
+  <section class="hubtop">
+    <span class="badge">NEW IN · 탭샵바 청계</span>
+    <h1>새 와인이<br>들어왔어요</h1>
+    <p class="muted">프랑스에서 온 레드 한 병, 화이트 한 병. 사진을 눌러 보세요.</p>
+  </section>
   <div class="filter">${allTags.map(t=>`<button class="tag${t===cur?' on':''}" data-t="${t}">#${t}</button>`).join('')}</div>
-  <div class="cards">${W.map(w=>`<a class="card ${w.type}" data-tags="${w.tags.join(' ')} ${w.type}" href="${w.id}/" data-log="nw-card-${w.id}">
-      <div><div class="meta">${flag(w)}</div><h3>${esc(w.nameKo)}</h3><div class="muted s">${esc(w.nameEn)} ${w.vintage}</div>
-      <div class="no"><b>No.${w.ladder}</b>12 사다리 · ${esc(L.find(x=>x.no===w.ladder).ko)}</div></div>
-      <img src="${w.img.replace('../','')}" alt=""><span class="go">자세히 보기 →</span></a>`).join('')}</div>
+  <div class="duo">${W.map(w=>`<a class="tile ${w.type}" data-tags="${w.tags.join(' ')} ${w.type}" href="${w.id}/" data-log="nw-tile-${w.id}">
+      <span class="tno">No.${w.ladder}</span>
+      <img src="${w.img.replace('../','')}" alt="${esc(w.nameKo)}">
+      <span class="tflag"><i><b></b><b></b><b></b></i>${esc(w.regionKo)}</span>
+      <span class="tnm">${esc(w.short)}</span>
+      <span class="tsub">${esc(TYPE_KO[w.type])} · ${w.vintage}${w.price?` · ${w.price.toLocaleString()}원`:''}</span>
+      <span class="tgo">보러 가기 →</span></a>`).join('')}</div>
   <div class="empty" id="empty">이 태그의 새 와인은 아직 없어요. 곧 들어와요.</div>
 
-  <section class="sec reveal" style="margin-top:30px"><div class="k">FIND YOUR NUMBER</div><h2>내 와인 번호 찾기</h2><p class="ladintro"><b>탭샵바 12 사다리</b>는 매장 와인을 맛에 따라 1~12번으로 나눈 지도예요. 질문 4개만 고르면 내 번호가 나와요. 와인 이름 몰라도, 번호만 말하면 돼요.</p>
+  <section class="sec reveal" style="margin-top:34px"><div class="k">FIND YOUR NUMBER</div><h2>내 와인 번호 찾기</h2><p class="ladintro"><b>탭샵바 12 사다리</b>는 매장 와인을 맛에 따라 1~12번으로 나눈 지도예요. 질문 4개만 고르면 내 번호가 나와요. 와인 이름 몰라도, 번호만 말하면 돼요.</p>
     <div class="finder" id="finder"></div></section>
 
   ${ctaHtml(null)}
+  ${navFoot(true)}
   ${footer().replace(/\.\.\/assets/g,'assets')}${sticky()}`;
   $$('.filter .tag').forEach(b => b.onclick = () => { $$('.filter .tag').forEach(x=>x.classList.toggle('on', x===b)); filter(b.dataset.t); history.replaceState(null,'', b.dataset.t==='all'?location.pathname:'?tag='+b.dataset.t); });
-  filter(cur); finder(); wirePage();
+  filter(cur); finder(); wirePage(); bindBack(true);
 }
-function filter(t){ let n = 0; $$('.card').forEach(c => { const ok = t==='all' || c.dataset.tags.split(' ').includes(t); c.classList.toggle('hide', !ok); if (ok) n++; }); $('#empty').style.display = n ? 'none' : 'block'; }
+function filter(t){ let n = 0; $$('.tile').forEach(c => { const ok = t==='all' || c.dataset.tags.split(' ').includes(t); c.classList.toggle('hide', !ok); if (ok) n++; }); $('#empty').style.display = n ? 'none' : 'block'; }
 
 function finder(){
   const box = $('#finder'); let path = [];
