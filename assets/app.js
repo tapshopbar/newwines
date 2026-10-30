@@ -134,7 +134,7 @@ function renderWine(id){
     <img class="bottle" src="${w.img}" alt="${esc(w.nameKo)} 병">
     <div class="tags">${w.tags.map(t => tagHtml(t, true)).join('')}</div>
     <div class="facts"><div><b>No.${w.ladder}</b><span>12 사다리</span></div><div><b>${esc(TYPE_KO[w.type])} · ${esc(w.abv)}</b><span>${esc(w.grapes)}</span></div><div><b>${w.vintage}</b><span>${esc(w.subKo)}</span></div></div>
-    ${w.price ? `<a class="price" href="#price">탭샵바 보틀 <b>${w.price.toLocaleString()}원</b> <span>유럽 가격과 비교 ↓</span></a>` : ''}
+    ${w.price ? `<a class="price" href="#price">탭샵바 보틀 <b>${w.price.toLocaleString()}원</b> <span>와인숍보다 싸요 ↓</span></a>` : ''}
   </section>
 
   <section class="sec reveal"><div class="k">TAP SHOP BAR 12 LADDER</div><h2>와인 이름 몰라도 괜찮아요.<br>번호 하나만 기억하세요</h2>
@@ -181,17 +181,18 @@ function renderWine(id){
 
 
 function priceHtml(w){
-  if (!w.price || !w.europe) return '';
-  const e = w.europe, max = Math.max(e.krw, w.price), x = (w.price / e.krw).toFixed(1);
-  return `<section class="sec reveal" id="price"><div class="k">PRICE</div><h2>유럽에선 얼마,<br>탭샵바에선 얼마?</h2>
+  if (!w.price || !w.shop) return '';
+  const k = w.shop.krw, diff = k - w.price, pct = Math.round(diff / k * 100);
+  return `<section class="sec reveal" id="price"><div class="k">PRICE</div><h2>와인숍보다 싸요.<br>그것도 매장에서.</h2>
     <div class="pcard">
-      <div class="prow"><div class="pl"><b>${esc(e.where)}</b><span>${esc(e.shop)} · ${esc(e.note)}</span></div><div class="pv"><b>${esc(e.local)}</b><span>약 ${e.krw.toLocaleString()}원</span></div></div>
-      <div class="pbar"><b style="--w:${e.krw/max*100}%"></b></div>
-      <div class="prow tsb"><div class="pl"><b>탭샵바 청계</b><span>매장 보틀 가격 · 부가세 포함</span></div><div class="pv"><b>${w.price.toLocaleString()}원</b><span>현지의 약 ${x}배</span></div></div>
-      <div class="pbar tsb"><b style="--w:${w.price/max*100}%"></b></div>
+      <div class="prow"><div class="pl"><b>국내 와인숍</b><span>온라인 판매가 · ${esc(w.shop.note)}</span></div><div class="pv"><b class="strike">${k.toLocaleString()}원</b></div></div>
+      <div class="pbar"><b style="--w:100%"></b></div>
+      <div class="prow tsb"><div class="pl"><b>탭샵바 청계</b><span>매장 보틀 가격 · 부가세 포함</span></div><div class="pv"><b>${w.price.toLocaleString()}원</b></div></div>
+      <div class="pbar tsb"><b style="--w:${w.price/k*100}%"></b></div>
+      <div class="save">${diff.toLocaleString()}원 더 싸요 <span>${pct}%↓</span></div>
     </div>
-    <p class="pnote">한국에 들어오면 주세 30%, 교육세(주세의 10%), 부가세 10%가 붙고 배로 오는 운송비도 들어요. 그걸 다 더하고도, 매장에서 마시는 값이 이 정도예요.</p>
-    <p class="psrc">${esc(T.fx)} · 유럽 가격은 현지 판매 사이트 기준, 빈티지·시점에 따라 달라요 · <a href="${e.src}" target="_blank" rel="noopener">출처 ↗</a></p>
+    <p class="pnote">사 가서 집에서 마시는 값보다, 탭샵바에 앉아서 마시는 값이 더 싸요.</p>
+    <p class="psrc">국내 온라인 와인숍 판매가 ${esc(T.shopDate)} 확인 기준 · 판매처·시점에 따라 달라질 수 있어요</p>
   </section>`;
 }
 

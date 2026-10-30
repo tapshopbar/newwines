@@ -11,7 +11,7 @@ window.TSB = {
   naver: 'https://m.booking.naver.com/booking/6/bizes/1180715/items/6096170',
   map: 'https://map.naver.com/p/search/%ED%83%AD%EC%83%B5%EB%B0%94%20%EC%B2%AD%EA%B3%84',
   reservation: 'https://tapshopbar.github.io/reservation/', // tsb.wine/reservation 연결되면 교체
-  fx: '환율 2026.10.29 유럽중앙은행(ECB) 기준',
+  shopDate: '2026.10.30',
   log: 'https://script.google.com/macros/s/AKfycbymH-sSHwMhwbDAPR03wYfIvW25j-ZTxm2i66geBy09zZDuiUPz2fqN6rx_JMKzL1l1lA/exec'
 };
 
@@ -46,7 +46,7 @@ window.WINES = [
     abv: '14%',
     size: '750ml',
     price: 42000,
-    europe: { where: '프랑스 와인숍', shop: 'Vinatis', local: '€18.00', krw: 26800, note: '2020 빈티지 · 1병 기준', src: 'https://www.vinatis.com/86328-chateau-pomeys-2020-cru-bourgeois' },
+    shop: { krw: 55000, note: '같은 2020 빈티지' },
     ladderWhy: ['단맛 없음 → <b>드라이</b>', '알코올 14% · 입안 가득 → <b>묵직</b>', '프랑스 오크통 12개월 숙성(새 통 1/3) → 잘 익은 블랙베리 위에 감초·바닐라 → <b>숙성향</b>'],
     ladder: 4,
     tags: ['red', 'france', 'bordeaux', 'crubourgeois', 'newin'],
@@ -98,7 +98,7 @@ window.WINES = [
     abv: '11.5%',
     size: '750ml',
     price: 25000,
-    europe: { where: '스웨덴 판매가', shop: 'Springwine', local: '83.50 SEK', krw: 11200, note: '2024 빈티지 · 1병 기준', src: 'https://springwine.se/produkter/vin/vitt/les-calcaires-sauvignon-blanc/' },
+    shop: { krw: 29000, note: '같은 와인' },
     ladderWhy: ['잔당 거의 0 → <b>드라이</b>', '알코올 11.5% · 산뜻 → <b>가벼운</b>', '오크통 없이 스테인리스 탱크 → 레몬·자몽·구스베리 → <b>시트러스</b>'],
     ladder: 10,
     tags: ['white', 'france', 'loire', 'sauvignonblanc', 'newin'],
@@ -114,7 +114,7 @@ window.WINES = [
     notes: ['레몬', '자몽', '구스베리', '풋풀', '미네랄'],
     story: [
       { y: '1749', t: '보르도에서 시작', d: '샤니에 가문의 포도 농사 기록은 1749년 보르도까지 거슬러 올라가요.' },
-      { y: '1973', t: '루아르로', d: '앙부아즈 성 아래 작은 저장고에서 피에르 샤니에 회사가 시작됐어요.' },
+      { y: '1973', t: '다빈치의 동네, 앙부아즈로', d: '레오나르도 다빈치가 잠든 앙부아즈 성, 그 바로 아래 작은 저장고에서 피에르 샤니에 회사가 시작됐어요.' },
       { y: 'Calcaires', t: '석회암', d: '"레 칼케르"는 화석이 많은 석회암 땅을 뜻해요. 이 땅이 와인에 쨍한 산미와 미네랄을 줘요.' },
       { y: 'NOW', t: '탭샵바 청계 매대에', d: '투렌 포도로 만든 2022 빈티지가 청계에 왔어요.' }
     ],
