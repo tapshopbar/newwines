@@ -11,6 +11,7 @@ window.TSB = {
   naver: 'https://m.booking.naver.com/booking/6/bizes/1180715/items/6096170',
   map: 'https://map.naver.com/p/search/%ED%83%AD%EC%83%B5%EB%B0%94%20%EC%B2%AD%EA%B3%84',
   reservation: 'https://tapshopbar.github.io/reservation/', // tsb.wine/reservation 연결되면 교체
+  fx: '환율 2026.10.29 유럽중앙은행(ECB) 기준',
   log: 'https://script.google.com/macros/s/AKfycbymH-sSHwMhwbDAPR03wYfIvW25j-ZTxm2i66geBy09zZDuiUPz2fqN6rx_JMKzL1l1lA/exec'
 };
 
@@ -41,9 +42,12 @@ window.WINES = [
     country: 'France', countryKo: '프랑스',
     region: 'Bordeaux', regionKo: '보르도',
     sub: 'Moulis-en-Médoc', subKo: '물리 앙 메독',
-    grapes: '메를로 60% · 카베르네 소비뇽 40%',
+    grapes: '메를로 · 카베르네 소비뇽',
+    abv: '14%',
     size: '750ml',
-    price: null,
+    price: 42000,
+    europe: { where: '프랑스 와인숍', shop: 'Vinatis', local: '€18.00', krw: 26800, note: '2020 빈티지 · 1병 기준', src: 'https://www.vinatis.com/86328-chateau-pomeys-2020-cru-bourgeois' },
+    ladderWhy: ['단맛 없음 → <b>드라이</b>', '알코올 14% · 입안 가득 → <b>묵직</b>', '프랑스 오크통 12개월 숙성(새 통 1/3) → 잘 익은 블랙베리 위에 감초·바닐라 → <b>숙성향</b>'],
     ladder: 4,
     tags: ['red', 'france', 'bordeaux', 'crubourgeois', 'newin'],
     img: '../assets/pomeys.png',
@@ -55,7 +59,7 @@ window.WINES = [
       '평론가 점수 90점대 (공급사 자료)'
     ],
     taste: { 바디: 4, 산미: 3, 탄닌: 3.5, 당도: 1 },
-    notes: ['블랙커런트', '블랙체리', '삼나무', '은은한 오크', '초콜릿'],
+    notes: ['잘 익은 블랙베리', '블랙체리', '감초', '은은한 오크', '바닐라'],
     story: [
       { y: '1932', t: '첫 크뤼 부르주아 명단', d: '메독의 "부르주아급" 샤또를 처음 줄 세운 해. 포메이는 그때부터 명단에 있었어요.' },
       { y: '2020', t: '새 등급에서 빠짐', d: '2020년 새 등급표가 나오면서 포메이 이름이 빠졌어요.' },
@@ -67,7 +71,7 @@ window.WINES = [
       { k: '하드 치즈', d: '콩테·고다처럼 고소한 치즈' },
       { k: '다크 초콜릿', d: '칼파제르 다크와 함께, 쌀쌀한 날 조합' }
     ],
-    serve: '16~18℃ · 열고 20분 기다리면 더 부드러워요',
+    serve: '16~18℃ · 마시기 1~2시간 전에 열어 두면 더 부드러워요',
     videos: ['story', 'noir'],
     quiz: [
       { q: '"크뤼 부르주아"는 어느 지역 등급일까요?', a: ['부르고뉴', '메독 (보르도)', '샴페인'], c: 1, why: '보르도 왼쪽 강변, 메독 지역의 등급이에요.' },
@@ -76,7 +80,7 @@ window.WINES = [
     ],
     faq: [
       { q: '크뤼 부르주아가 뭐예요?', a: '보르도 메독에서 1855년 그랑 크뤼 바로 아래, "실속 좋은 샤또"를 모은 등급이에요. 지금은 몇 년마다 다시 심사해서 들어가고 빠지기도 해요.' },
-      { q: '무거운 레드 처음인데 괜찮을까요?', a: '메를로가 60%라 카베르네만 쓴 와인보다 둥글어요. 처음이면 고기·치즈랑 같이 드셔 보세요.' },
+      { q: '무거운 레드 처음인데 괜찮을까요?', a: '메를로가 넉넉히 들어가서 카베르네만 쓴 와인보다 둥글어요. 마시기 1~2시간 전에 열어 두고, 고기·치즈랑 같이 드셔 보세요.' },
       { q: '어디서 만날 수 있어요?', a: '지금은 탭샵바 청계(삼일빌딩 B1) 매대에 있어요. 수량이 적어서 다 나가면 끝이에요.' }
     ]
   },
@@ -91,8 +95,11 @@ window.WINES = [
     region: 'Loire', regionKo: '루아르',
     sub: 'Touraine (Vin de France)', subKo: '투렌 · 뱅 드 프랑스',
     grapes: '소비뇽 블랑 100%',
+    abv: '11.5%',
     size: '750ml',
-    price: null,
+    price: 25000,
+    europe: { where: '스웨덴 판매가', shop: 'Springwine', local: '83.50 SEK', krw: 11200, note: '2024 빈티지 · 1병 기준', src: 'https://springwine.se/produkter/vin/vitt/les-calcaires-sauvignon-blanc/' },
+    ladderWhy: ['잔당 거의 0 → <b>드라이</b>', '알코올 11.5% · 산뜻 → <b>가벼운</b>', '오크통 없이 스테인리스 탱크 → 레몬·자몽·구스베리 → <b>시트러스</b>'],
     ladder: 10,
     tags: ['white', 'france', 'loire', 'sauvignonblanc', 'newin'],
     img: '../assets/calcaires-sb.png',
@@ -104,7 +111,7 @@ window.WINES = [
       '1749년까지 뿌리가 닿는 와인 집안, 피에르 샤니에'
     ],
     taste: { 바디: 2, 산미: 4.5, 탄닌: 0, 당도: 1 },
-    notes: ['레몬', '자몽', '라임 껍질', '풋풀', '미네랄'],
+    notes: ['레몬', '자몽', '구스베리', '풋풀', '미네랄'],
     story: [
       { y: '1749', t: '보르도에서 시작', d: '샤니에 가문의 포도 농사 기록은 1749년 보르도까지 거슬러 올라가요.' },
       { y: '1973', t: '루아르로', d: '앙부아즈 성 아래 작은 저장고에서 피에르 샤니에 회사가 시작됐어요.' },

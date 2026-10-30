@@ -43,7 +43,8 @@ small,.s{font-size:13px}
 .hero .facts div{background:rgba(0,0,0,.22);border:1px solid var(--line);border-radius:14px;padding:11px 12px}
 .hero .facts b{display:block;font-size:15px;font-weight:800}
 .hero .facts span{font-size:11px;opacity:.7}
-.price{margin-top:14px;font-size:15px;font-weight:700}
+.price{position:relative;z-index:2;display:flex;align-items:baseline;gap:8px;flex-wrap:wrap;margin-top:12px;font-size:15px;font-weight:600}
+.price b{font-size:22px;font-weight:900;color:var(--yellow)}.price span{font-size:12px;opacity:.75;text-decoration:underline}
 
 /* ladder */
 .ladcard{background:var(--cream);color:var(--ink);border-radius:var(--r);padding:20px}
@@ -228,3 +229,23 @@ body.light .filter .tag:not(.on){background:#fff;border-color:var(--line)}
 .tree .leaf.on circle{fill:var(--wine)}.tree .leaf.on text{fill:#fff}
 .tree .leaf.pick circle{stroke:#0E0E0E;stroke-width:2}
 .treekey{display:flex;justify-content:space-between;font-size:10.5px;font-weight:700;color:#8a8388;margin-top:2px;padding:0 2px}
+
+/* 사다리 근거 */
+.why{margin-top:12px;display:grid;gap:7px;padding:14px;border-radius:12px;background:#FBF6F6}
+.whyh{font-size:12px;font-weight:800;letter-spacing:.06em;color:var(--wine)}
+.why div:not(.whyh){display:flex;gap:9px;font-size:14px;line-height:1.45;color:#3b3538}
+.why i{flex:none;width:19px;height:19px;border-radius:50%;background:var(--wine);color:#fff;font-style:normal;font-size:11px;font-weight:900;display:flex;align-items:center;justify-content:center;margin-top:1px}
+.why b{color:var(--wine)}
+/* 가격 비교 */
+.pcard{border-radius:var(--r);padding:20px;background:var(--panel);border:1px solid var(--line)}
+body.light .pcard{background:#fff;box-shadow:0 12px 30px rgba(74,11,24,.08)}
+.prow{display:flex;justify-content:space-between;align-items:flex-end;gap:12px}
+.pl b{display:block;font-size:16px;font-weight:800}.pl span{font-size:12px;color:var(--fg2)}
+.pv{text-align:right}.pv b{display:block;font-size:22px;font-weight:900;letter-spacing:-.02em}.pv span{font-size:12px;color:var(--fg2)}
+.prow.tsb .pv b{color:var(--wine);font-size:26px}
+body:not(.light) .prow.tsb .pv b{color:var(--yellow)}
+.pbar{height:12px;border-radius:99px;background:var(--track);margin:10px 0 18px;overflow:hidden}
+.pbar b{display:block;height:100%;width:var(--w);border-radius:99px;background:#B9B2B5}
+.pbar.tsb{margin-bottom:0}.pbar.tsb b{background:linear-gradient(90deg,#C9969B,#6E1426)}
+.pnote{margin-top:16px;font-size:15px;line-height:1.6;color:var(--fg2)}
+.psrc{margin-top:10px;font-size:11.5px;color:var(--fg2)}.psrc a{text-decoration:underline}

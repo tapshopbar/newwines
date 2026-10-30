@@ -133,14 +133,14 @@ function renderWine(id){
     <div class="hook">${esc(w.hook)}</div>
     <img class="bottle" src="${w.img}" alt="${esc(w.nameKo)} 병">
     <div class="tags">${w.tags.map(t => tagHtml(t, true)).join('')}</div>
-    <div class="facts"><div><b>No.${w.ladder}</b><span>12 사다리</span></div><div><b>${esc(TYPE_KO[w.type])}</b><span>${esc(w.grapes.split(' · ')[0])}</span></div><div><b>${w.vintage}</b><span>${esc(w.subKo)}</span></div></div>
-    ${w.price ? `<div class="price">보틀 ${w.price.toLocaleString()}원</div>` : ''}
+    <div class="facts"><div><b>No.${w.ladder}</b><span>12 사다리</span></div><div><b>${esc(TYPE_KO[w.type])} · ${esc(w.abv)}</b><span>${esc(w.grapes)}</span></div><div><b>${w.vintage}</b><span>${esc(w.subKo)}</span></div></div>
+    ${w.price ? `<a class="price" href="#price">탭샵바 보틀 <b>${w.price.toLocaleString()}원</b> <span>유럽 가격과 비교 ↓</span></a>` : ''}
   </section>
 
   <section class="sec reveal"><div class="k">TAP SHOP BAR 12 LADDER</div><h2>와인 이름 몰라도 괜찮아요.<br>번호 하나만 기억하세요</h2>
     <p class="ladintro"><b>탭샵바 12 사다리</b>는 매장 와인을 맛에 따라 1번부터 12번까지 나눈 지도예요. <b>색 → 단맛 → 무게 → 향</b>, 사다리 타듯 내려가면 내 번호가 나와요.</p>
     <div class="ladcard"><div class="ladhead"><div class="ladno"><small>이 와인은</small>${w.ladder}</div><div class="what"><b>${esc(lad.ko)}</b><span>${esc(lad.en)}</span></div></div>
-    ${treeSvg(pathOf(w.ladder), w.ladder)}<div class="ladtip" id="ladtip"></div>
+    ${treeSvg(pathOf(w.ladder), w.ladder)}${w.ladderWhy?`<div class="why"><div class="whyh">왜 ${w.ladder}번이냐면</div>${w.ladderWhy.map((x,i)=>`<div><i>${i+1}</i><span>${x}</span></div>`).join('')}</div>`:''}<div class="ladtip" id="ladtip"></div>
     <div class="ladsrc">번호를 눌러 보세요.</div></div>
     <p class="muted s" style="margin-top:14px">${w.ladder}번이 좋았다면, 다음엔 "${w.ladder}번 와인 다른 거요" 라고만 말해 주세요.</p>
   </section>
@@ -161,6 +161,7 @@ function renderWine(id){
 
   <section class="sec reveal"><div class="k">WATCH</div><h2>영상으로 보기</h2><div class="vids">${videoHtml(w.videos)}</div></section>
 
+  ${priceHtml(w)}
   ${franceHtml(w)}
 
   <section class="sec reveal"><div class="k">PAIRING</div><h2>뭐랑 마셔요?</h2>
@@ -176,6 +177,22 @@ function renderWine(id){
   ${ctaHtml(w)}
   ${footer()}${sticky()}`;
   bindLadder(w.ladder); bindVideos(); quiz(w); wirePage();
+}
+
+
+function priceHtml(w){
+  if (!w.price || !w.europe) return '';
+  const e = w.europe, max = Math.max(e.krw, w.price), x = (w.price / e.krw).toFixed(1);
+  return `<section class="sec reveal" id="price"><div class="k">PRICE</div><h2>유럽에선 얼마,<br>탭샵바에선 얼마?</h2>
+    <div class="pcard">
+      <div class="prow"><div class="pl"><b>${esc(e.where)}</b><span>${esc(e.shop)} · ${esc(e.note)}</span></div><div class="pv"><b>${esc(e.local)}</b><span>약 ${e.krw.toLocaleString()}원</span></div></div>
+      <div class="pbar"><b style="--w:${e.krw/max*100}%"></b></div>
+      <div class="prow tsb"><div class="pl"><b>탭샵바 청계</b><span>매장 보틀 가격 · 부가세 포함</span></div><div class="pv"><b>${w.price.toLocaleString()}원</b><span>현지의 약 ${x}배</span></div></div>
+      <div class="pbar tsb"><b style="--w:${w.price/max*100}%"></b></div>
+    </div>
+    <p class="pnote">한국에 들어오면 주세 30%, 교육세(주세의 10%), 부가세 10%가 붙고 배로 오는 운송비도 들어요. 그걸 다 더하고도, 매장에서 마시는 값이 이 정도예요.</p>
+    <p class="psrc">${esc(T.fx)} · 유럽 가격은 현지 판매 사이트 기준, 빈티지·시점에 따라 달라요 · <a href="${e.src}" target="_blank" rel="noopener">출처 ↗</a></p>
+  </section>`;
 }
 
 function franceHtml(w){
