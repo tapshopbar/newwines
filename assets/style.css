@@ -216,18 +216,38 @@ body.light .filter .tag:not(.on){background:#fff;border-color:var(--line)}
 /* 12 사다리 그림 */
 .ladintro{font-size:16px;line-height:1.6;color:var(--fg2);margin:-6px 0 18px}
 .ladintro b{color:var(--fg)}
-.tree{width:100%;height:auto;display:block;margin-top:6px}
-.tree .ln{fill:none;stroke:#DDD5D6;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
-.tree .ln.on{stroke:var(--wine);stroke-width:3.2}
-.tree .lab{font-size:10px;font-weight:700;fill:#8a8388;text-anchor:middle;font-family:inherit}
-.tree .lab.on{fill:var(--wine);font-weight:900}
-.tree .top{font-size:10.5px;font-weight:900;letter-spacing:.06em}
-.tree .leaf circle{fill:#F1ECEC;stroke:none;transition:.2s}
-.tree .leaf.red circle{fill:#F6E6E8}.tree .leaf.white circle{fill:#F7F1DE}.tree .leaf.sparkling circle{fill:#E7EEFA}
-.tree .leaf text{font-size:11.5px;font-weight:900;fill:#6f676c;text-anchor:middle;dominant-baseline:central;pointer-events:none}
+/* chacha 12 WINES 보드 (원본 검정 표를 Fall in Wine 톤으로) */
+.ladboard{margin:14px -12px 0;border-radius:16px;padding:18px 4px 12px;background:radial-gradient(120% 60% at 50% 0%,#2a0a12 0%,#120a0d 55%,#0E0E0E 100%);color:#F4EEEA;box-shadow:inset 0 0 0 1px rgba(255,253,252,.06)}
+.chhead{text-align:center;padding:2px 8px 6px}
+.chb{display:flex;align-items:center;justify-content:center;gap:10px;font-family:Georgia,'Times New Roman',serif;font-style:italic;font-size:17px;letter-spacing:.02em;color:#E9DFDA}
+.chb i{display:block;height:1px;width:56px;background:rgba(255,253,252,.45)}
+.chw{font-size:34px;font-weight:500;letter-spacing:.06em;line-height:1.1;margin-top:2px;color:#FFFDFC}
+.chw sup{font-size:9px;letter-spacing:0;vertical-align:top;position:relative;top:6px;margin-left:2px}
+.chhead p{font-size:12.5px;line-height:1.65;font-weight:600;margin:10px 0 6px;color:#EDE5E1}
+.chhead small{font-size:9.5px;color:rgba(237,229,225,.55)}
+.tree{width:100%;height:auto;display:block;margin-top:10px;font-family:inherit}
+.tree text{text-anchor:middle;font-family:inherit}
+.tree .ln{fill:none;stroke:rgba(244,238,234,.32);stroke-width:1.4;stroke-linecap:round;transition:.2s}
+.tree .ln.on.red{stroke:#E0364F;stroke-width:2.6}.tree .ln.on.white{stroke:#F4B544;stroke-width:2.6}.tree .ln.on.sparkling{stroke:#C9C6CC;stroke-width:2.6}
+.tree .topc circle{stroke:none}
+.tree .topc.red circle{fill:#C8203B}.tree .topc.white circle{fill:#F2B347}.tree .topc.sparkling circle{fill:#A8A5AC}
+.tree .topc text{fill:#fff;font-size:10.5px;font-weight:800;letter-spacing:.06em;dominant-baseline:central}
+.tree .topko{font-size:11px;font-weight:900}
+.tree .topko.red{fill:#EE4560}.tree .topko.white{fill:#F4B544}.tree .topko.sparkling{fill:#E2DFE4}
+.tree .lab text.ko{fill:#F7F2EF;font-size:11px;font-weight:800}
+.tree .lab text.ko.sm{font-size:9.2px;font-weight:700;fill:#E9E2DE}
+.tree .lab text.en{fill:rgba(244,238,234,.72);font-size:6px;font-weight:700;letter-spacing:.05em}
 .tree .leaf{cursor:pointer}
-.tree .leaf.on circle{fill:var(--wine)}.tree .leaf.on text{fill:#fff}
-.tree .leaf.pick circle{stroke:#0E0E0E;stroke-width:2}
+.tree .leaf circle{fill:#FFFDFC;stroke:none;transition:.2s}
+.tree .leaf text{font-size:13px;font-weight:600;dominant-baseline:central;pointer-events:none}
+.tree .leaf.red text{fill:#C8203B}.tree .leaf.white text{fill:#E3A12E}.tree .leaf.sparkling text{fill:#9C99A1}
+.tree .leaf.on.red circle{fill:#C8203B}.tree .leaf.on.white circle{fill:#F2B347}.tree .leaf.on.sparkling circle{fill:#A8A5AC}
+.tree .leaf.on text{fill:#fff;font-weight:900}
+.tree .leaf.on circle{filter:drop-shadow(0 0 6px rgba(255,255,255,.35))}
+.tree .leaf.pick circle{stroke:#FFC100;stroke-width:2.4}
+.ladboard.detail .tree .ln:not(.on),.ladboard.detail .tree .lab:not(.on),.ladboard.detail .tree .topc:not(.on),.ladboard.detail .tree .topko:not(.on){opacity:.42}
+.ladboard.detail .tree .leaf:not(.on){opacity:.7}
+.fres .ladboard,.finder .ladboard{margin:12px 0}
 .treekey{display:flex;justify-content:space-between;font-size:10.5px;font-weight:700;color:#8a8388;margin-top:2px;padding:0 2px}
 
 /* 사다리 근거 */
@@ -294,10 +314,10 @@ body.light .navfoot .btn2{background:#fff}
 .frs{display:block;margin-top:8px;font-size:16px;font-weight:600;color:var(--fg2)}
 .fpath:empty{display:none}
 #ladtip:empty{display:none}
-.tree .lab{font-size:10.5px}
-.tree .leaf text{font-size:12.5px}
-.tree.detail .ln:not(.on){opacity:.5}
-.tree.detail .lab:not(.on){opacity:.65}
 .tpr{font-size:13px;font-weight:600;opacity:.9}
 .tpr s{opacity:.6;font-weight:500}
 .tpr b{font-size:15px;font-weight:900;color:#FFC100}
+
+@media (min-width:600px){.ladboard{margin:14px 0 0;padding:22px 16px 14px}}
+.chhead p{word-break:keep-all}
+@media (max-width:599px){.chhead p br{display:none}.chhead p{font-size:12px;padding:0 6px}}

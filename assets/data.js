@@ -17,18 +17,18 @@ window.TSB = {
 
 /* 나기정 대표님 12 사다리 (Drive: "와인 리스트 12가지 분류 및 추천") */
 window.LADDER = [
-  { no: 1,  type: 'red',       en: 'Sweet / Full-bodied',  ko: '달콤 · 묵직',            ex: '포트 와인처럼 진하고 달콤' },
+  { no: 1,  type: 'red',       en: 'Sweet / Full-bodied',  ko: '달콤 · 무거운',            ex: '포트 와인처럼 진하고 달콤' },
   { no: 2,  type: 'red',       en: 'Sweet / Light-bodied', ko: '달콤 · 가벼운',           ex: '브라케토처럼 산뜻하게 달콤' },
-  { no: 3,  type: 'red',       en: 'Dry / Full / Aroma',   ko: '드라이 · 묵직 · 과일향',   ex: '말벡·쉬라즈처럼 잘 익은 과일' },
-  { no: 4,  type: 'red',       en: 'Dry / Full / Bouquet', ko: '드라이 · 묵직 · 숙성향',   ex: '카베르네 블렌드처럼 오크·삼나무·가죽' },
-  { no: 5,  type: 'red',       en: 'Dry / Light / Floral', ko: '드라이 · 가벼운 · 꽃향',   ex: '피노·가메처럼 붉은 꽃과 체리' },
-  { no: 6,  type: 'red',       en: 'Dry / Light / Savory', ko: '드라이 · 가벼운 · 짭짤',   ex: '카르메네르처럼 허브·후추' },
-  { no: 7,  type: 'white',     en: 'Sweet / Full-bodied',  ko: '달콤 · 묵직',            ex: '모스카토처럼 꿀·살구' },
+  { no: 3,  type: 'red',       en: 'Dry / Full-bodied / Aroma',   ko: '안달콤 · 무거운 · 과일 꽃향기가 풍부한',   ex: '말벡·쉬라즈처럼 잘 익은 과일' },
+  { no: 4,  type: 'red',       en: 'Dry / Full-bodied / Bouquet', ko: '안달콤 · 무거운 · 과일향보다 오크숙성향이 두드러진',   ex: '카베르네 블렌드처럼 오크·삼나무·가죽' },
+  { no: 5,  type: 'red',       en: 'Dry / Light-bodied / Mossy, Grassy & Floral', ko: '안달콤 · 가벼운 · 이끼물풀향 딸기향 꽃향',   ex: '피노·가메처럼 붉은 꽃과 체리' },
+  { no: 6,  type: 'red',       en: 'Dry / Light-bodied / Savory & Mineral', ko: '안달콤 · 가벼운 · 과일향보다 감칠맛 미네랄맛',   ex: '카르메네르처럼 허브·후추' },
+  { no: 7,  type: 'white',     en: 'Sweet / Full-bodied',  ko: '달콤 · 무거운',            ex: '모스카토처럼 꿀·살구' },
   { no: 8,  type: 'white',     en: 'Sweet / Light-bodied', ko: '달콤 · 가벼운',           ex: '리슬링처럼 사과·복숭아' },
-  { no: 9,  type: 'white',     en: 'Dry / Full / Tropical',ko: '드라이 · 묵직 · 열대과일', ex: '버터리 샤르도네처럼 파인애플·버터' },
-  { no: 10, type: 'white',     en: 'Dry / Light / Citrus', ko: '드라이 · 가벼운 · 시트러스', ex: '소비뇽 블랑처럼 레몬·자몽' },
-  { no: 11, type: 'sparkling', en: 'Sweet / Casual',       ko: '달콤 · 캐주얼',           ex: '모스카토 다스티처럼 달콤한 버블' },
-  { no: 12, type: 'sparkling', en: 'Dry / Crisp',          ko: '드라이 · 쨍한',           ex: '브뤼·까바처럼 드라이한 버블' }
+  { no: 9,  type: 'white',     en: 'Dry / Full-bodied / Tropical & Nutty',ko: '안달콤 · 무거운 · 열대과일 바닐라 꿀, 너트', ex: '버터리 샤르도네처럼 파인애플·버터' },
+  { no: 10, type: 'white',     en: 'Dry / Light-bodied / Citrus, Herbal & Floral', ko: '안달콤 · 가벼운 · 자몽 레몬 허브, 꽃', ex: '소비뇽 블랑처럼 레몬·자몽' },
+  { no: 11, type: 'sparkling', en: 'Sweet',       ko: '달콤',           ex: '모스카토 다스티처럼 달콤한 버블' },
+  { no: 12, type: 'sparkling', en: 'Dry',          ko: '안달콤',           ex: '브뤼·까바처럼 드라이한 버블' }
 ];
 
 window.WINES = [
@@ -47,7 +47,7 @@ window.WINES = [
     size: '750ml',
     price: 42000,
     shop: { krw: 55000, note: '같은 2020 빈티지' },
-    ladderWhy: ['단맛 없음 → <b>드라이</b>', '알코올 14% · 입안 가득 → <b>묵직</b>', '프랑스 오크통 12개월 숙성(새 통 1/3) → 잘 익은 블랙베리 위에 감초·바닐라 → <b>숙성향</b>'],
+    ladderWhy: ['단맛 없음 → <b>안달콤</b>', '알코올 14% · 입안 가득 → <b>무거운</b>', '프랑스 오크통 12개월 숙성(새 통 1/3) → 잘 익은 블랙베리 위에 감초·바닐라 → <b>과일향보다 오크숙성향이 두드러진</b>'],
     ladder: 4,
     tags: ['red', 'france', 'bordeaux', 'crubourgeois', 'newin'],
     img: '../assets/pomeys.png',
@@ -77,7 +77,7 @@ window.WINES = [
     quiz: [
       { q: '"크뤼 부르주아"는 어느 지역 등급일까요?', a: ['부르고뉴', '메독 (보르도)', '샴페인'], c: 1, why: '보르도 왼쪽 강변, 메독 지역의 등급이에요.' },
       { q: '포메이가 등급을 되찾은 방법은?', a: ['이름을 바꿈', '소송에서 이김', '새 포도밭을 삼'], c: 1, why: '2022년 5월 보르도 행정법원에서 이겼어요.' },
-      { q: '12 사다리에서 포메이는 몇 번?', a: ['3번 과일향', '4번 숙성향', '10번 시트러스'], c: 1, why: '드라이 · 묵직 · 숙성향 = 4번.' }
+      { q: '12 사다리에서 포메이는 몇 번?', a: ['3번 과일 꽃향기', '4번 오크숙성향', '10번 자몽·레몬'], c: 1, why: '안달콤 · 무거운 · 오크숙성향(BOUQUET) = 4번.' }
     ],
     faq: [
       { q: '크뤼 부르주아가 뭐예요?', a: '보르도 메독에서 1855년 그랑 크뤼 바로 아래, "실속 좋은 샤또"를 모은 등급이에요. 지금은 몇 년마다 다시 심사해서 들어가고 빠지기도 해요.' },
@@ -100,7 +100,7 @@ window.WINES = [
     size: '750ml',
     price: 25000,
     shop: { krw: 29000, note: '같은 와인' },
-    ladderWhy: ['잔당 거의 0 → <b>드라이</b>', '알코올 11.5% · 산뜻 → <b>가벼운</b>', '오크통 없이 스테인리스 탱크 → 레몬·자몽·구스베리 → <b>시트러스</b>'],
+    ladderWhy: ['잔당 거의 0 → <b>안달콤</b>', '알코올 11.5% · 산뜻 → <b>가벼운</b>', '오크통 없이 스테인리스 탱크 → 레몬·자몽·구스베리 → <b>자몽 레몬 허브, 꽃</b>'],
     ladder: 10,
     tags: ['white', 'france', 'loire', 'sauvignonblanc', 'newin'],
     img: '../assets/calcaires-sb.png',
@@ -129,7 +129,7 @@ window.WINES = [
     quiz: [
       { q: '"Les Calcaires"는 무슨 뜻일까요?', a: ['석회암', '달팽이', '햇살'], c: 0, why: '화석이 많은 석회암 땅이라는 뜻이에요.' },
       { q: '루아르 소비뇽 블랑의 교과서 짝꿍은?', a: ['염소 치즈', '떡볶이', '마카롱'], c: 0, why: '상세르 + 샤비뇰 염소 치즈, 루아르 고향 조합이에요. 굴도 잘 맞아요.' },
-      { q: '12 사다리에서 이 와인은 몇 번?', a: ['8번 달콤', '9번 열대과일', '10번 시트러스'], c: 2, why: '드라이 · 가벼운 · 시트러스 = 10번.' }
+      { q: '12 사다리에서 이 와인은 몇 번?', a: ['8번 달콤', '9번 열대과일', '10번 자몽·레몬'], c: 2, why: '안달콤 · 가벼운 · 자몽 레몬 허브, 꽃 = 10번.' }
     ],
     faq: [
       { q: '뉴질랜드 소비뇽 블랑이랑 뭐가 달라요?', a: '뉴질랜드는 패션프루트처럼 향이 크게 터지고, 루아르는 레몬·미네랄 쪽으로 더 단정해요. 음식이랑 같이 먹기 편한 쪽이 루아르예요.' },

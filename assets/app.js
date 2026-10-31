@@ -11,38 +11,76 @@ function log(k){ if (/^(127\.0\.0\.1|localhost)$/.test(location.hostname)) retur
 document.addEventListener('click', e => { const a = e.target.closest('[data-log]'); if (a) log(a.dataset.log); });
 
 
-/* 12 사다리 그림 (SVG). hl = 'red/dry/full/bouquet' 같은 경로, on = 강조할 번호 */
+/* 12 사다리 그림 (SVG) = chacha 12 WINES 표. 문구는 원본 그대로. hl = 'red/dry/full/bouquet' 같은 경로, on = 강조할 번호 */
 const TREE = (() => {
+  const XS = [32, 90, 148, 206, 264, 322];
   const leaves = [
-    ['red/sweet/full',1,'묵직'],['red/sweet/light',2,'가벼운'],['red/dry/full/aroma',3,'과일'],['red/dry/full/bouquet',4,'숙성'],['red/dry/light/floral',5,'꽃'],['red/dry/light/savory',6,'짭짤'],
-    ['white/sweet/full',7,'묵직'],['white/sweet/light',8,'가벼운'],['white/dry/full',9,'묵직'],['white/dry/light',10,'가벼운'],
-    ['sparkling/sweet',11,'달콤'],['sparkling/dry',12,'드라이']];
-  const LBL = { red:'RED', white:'WHITE', sparkling:'SPARKLING', sweet:'달콤', dry:'드라이', full:'묵직', light:'가벼운' };
-  const X = {}, Y = { 0:16, 1:62, 2:108, 3:150 }, LY = 190, CY = 211;
-  leaves.forEach(([k], i) => { const g = i < 6 ? 0 : i < 10 ? 1 : 2; X[k] = 16 + i*27 + g*18; });
+    ['red/sweet/full',1,0,0],['red/sweet/light',2,1,0],['red/dry/full/aroma',3,2,0],['red/dry/full/bouquet',4,3,0],['red/dry/light/floral',5,4,0],['red/dry/light/savory',6,5,0],
+    ['white/sweet/full',7,0,1],['white/sweet/light',8,1,1],['white/dry/full',9,2,1],['white/dry/light',10,3,1],
+    ['sparkling/sweet',11,4,1],['sparkling/dry',12,5,1]];
+  const LBL = {
+    sweet:{ko:['달콤'],en:['SWEET']}, dry:{ko:['안달콤'],en:['DRY']},
+    full:{ko:['무거운'],en:['FULL-','BODIED']}, light:{ko:['가벼운'],en:['LIGHT-','BODIED']},
+    'red/dry/full/aroma':{ko:['과일','꽃향기가','풍부한'],en:['AROMA']},
+    'red/dry/full/bouquet':{ko:['과일향보다','오크숙성향이','두드러진'],en:['BOUQUET']},
+    'red/dry/light/floral':{ko:['이끼물풀향','딸기향','꽃향'],en:['MOSSY, GRASSY','& FLORAL']},
+    'red/dry/light/savory':{ko:['과일향보다','감칠맛','미네랄맛'],en:['SAVORY','& MINERAL']},
+    'white/dry/full':{ko:['열대과일','바닐라','꿀, 너트'],en:['TROPICAL','& NUTTY'],desc:1},
+    'white/dry/light':{ko:['자몽','레몬','허브, 꽃'],en:['CITRUS, HERBAL','& FLORAL'],desc:1}
+  };
+  const TOP = { red:['RED','레드'], white:['WHITE','화이트'], sparkling:['SPARK','LING','스파클링'] };
+  const RH = 300, Y = { 0:30, 1:100, 2:150, 3:196 }, CY = 270;
+  const X = {}, ROW = {};
+  leaves.forEach(([k,,i,r]) => { X[k] = XS[i]; ROW[k] = r; });
   const nodes = {};
-  leaves.forEach(([k]) => { const p = k.split('/'); for (let d = 1; d < p.length; d++) { const id = p.slice(0,d).join('/'); (nodes[id] = nodes[id] || []).push(X[k]); } });
+  leaves.forEach(([k]) => { const p = k.split('/'); for (let d = 1; d <= p.length; d++) { const id = p.slice(0,d).join('/'); (nodes[id] = nodes[id] || []).push(X[k]); } });
   const nx = id => { const a = nodes[id]; return (Math.min(...a) + Math.max(...a)) / 2; };
-  return { leaves, LBL, X, Y, LY, CY, nodes, nx };
+  return { leaves, LBL, TOP, RH, Y, CY, X, ROW, nodes, nx };
 })();
 function treeSvg(hl, on){
-  const { leaves, LBL, X, Y, LY, CY, nodes, nx } = TREE;
+  const { leaves, LBL, TOP, RH, Y, CY, ROW, nodes, nx } = TREE;
   const pre = new Set(); if (hl) { const p = hl.split('/'); for (let d = 1; d <= p.length; d++) pre.add(p.slice(0,d).join('/')); }
+  const onLeaf = leaves.find(l => l[1] === on); if (onLeaf) { const p = onLeaf[0].split('/'); for (let d = 1; d <= p.length; d++) pre.add(p.slice(0,d).join('/')); }
+  const rowOf = id => ROW[leaves.find(l => l[0].startsWith(id))[0]] * RH;
   let lines = '', labs = '', lv = '';
-  const edge = (x1, y1, x2, y2, isOn) => { const m = y1 + (y2 - y1) * .45; lines += `<path class="ln${isOn?' on':''}" d="M${x1} ${y1} V${m} H${x2} V${y2}"/>`; };
-  Object.keys(nodes).forEach(id => {
-    const d = id.split('/').length - 1, x = nx(id), last = id.split('/').pop();
-    labs += `<text class="lab${d===0?' top':''}${pre.has(id)?' on':''}" x="${d===0?Math.min(x,330):x}" y="${Y[d]}">${LBL[last]}</text>`;
-    if (d > 0) { const par = id.split('/').slice(0,-1).join('/'); edge(nx(par), Y[d-1] + 6, x, Y[d] - 11, pre.has(id)); }
+  const bottom = {};
+  const edge = (t, x1, y1, x2, y2, isOn) => { const m = y1 + (y2 - y1) * .5; const r = Math.min(8, Math.abs(x2 - x1) / 2, (y2 - y1) / 2);
+    const dir = x2 > x1 ? 1 : -1;
+    const d = Math.abs(x2 - x1) < 1 ? `M${x1} ${y1} V${y2}` : `M${x1} ${y1} V${m - r} Q${x1} ${m} ${x1 + dir*r} ${m} H${x2 - dir*r} Q${x2} ${m} ${x2} ${m + r} V${y2}`;
+    lines += `<path class="ln ${t}${isOn?' on':''}" d="${d}"/>`; };
+  const label = (id, x, y, t, isOn, force) => {
+    const last = id.split('/').pop(), L = force || LBL[id] || LBL[last]; const big = L.ko.length === 1;
+    let h = '', yy = y;
+    L.ko.forEach(s => { h += `<text class="ko${big?'':' sm'}" x="${x}" y="${yy}">${s}</text>`; yy += big ? 12 : 11.5; });
+    yy += big ? 0 : 1.5;
+    L.en.forEach(s => { h += `<text class="en" x="${x}" y="${yy}">${s}</text>`; yy += 7.5; });
+    labs += `<g class="lab ${t}${isOn?' on':''}">${h}</g>`;
+    bottom[id] = yy - 3;
+  };
+  ['red','white','sparkling'].forEach(t => {
+    const oy = rowOf(t), x = nx(t), isOn = pre.has(t), T = TOP[t];
+    const txt = T.length === 3 ? `<text x="${x}" y="${oy+Y[0]-4}">${T[0]}</text><text x="${x}" y="${oy+Y[0]+8}">${T[1]}</text>` : `<text x="${x}" y="${oy+Y[0]+2}">${T[0]}</text>`;
+    labs += `<g class="topc ${t}${isOn?' on':''}"><circle cx="${x}" cy="${oy+Y[0]}" r="23"/>${txt}</g><text class="topko ${t}${isOn?' on':''}" x="${x}" y="${oy+Y[0]+40}">${T[T.length-1]}</text>`;
+    bottom[t] = oy + Y[0] + 46;
   });
-  leaves.forEach(([k, no, lab]) => {
-    const p = k.split('/'), par = p.slice(0,-1).join('/'), d = p.length - 2, isOn = pre.has(k) || on === no;
-    edge(nx(par), Y[d] + 6, X[k], LY - 10, isOn);
-    labs += `<text class="lab${isOn?' on':''}" x="${X[k]}" y="${LY}">${lab}</text>`;
-    lv += `<g class="leaf ${p[0]}${on===no?' on':''}" data-no="${no}"><circle cx="${X[k]}" cy="${CY}" r="13"/><text x="${X[k]}" y="${CY}">${no}</text></g>`;
+  Object.keys(nodes).sort((a,b) => a.split('/').length - b.split('/').length).forEach(id => {
+    const p = id.split('/'), d = p.length - 1; if (d === 0) return;
+    const t = p[0], oy = rowOf(t), x = nx(id), par = p.slice(0,-1).join('/');
+    const y = oy + Y[d];
+    edge(t, nx(par), bottom[par] + 3, x, y - 13, pre.has(id));
+    if (LBL[id] && LBL[id].desc) { label(id, x, y, t, pre.has(id), LBL[p[d]]); const b = bottom[id], y3 = oy + Y[3];
+      lines += `<path class="ln ${t}${pre.has(id)?' on':''}" d="M${x} ${b + 4} V${y3 - 13}"/>`; label(id, x, y3, t, pre.has(id), LBL[id]); }
+    else label(id, x, y, t, pre.has(id));
   });
-  return `<svg class="tree" viewBox="0 0 362 228" role="img" aria-label="탭샵바 12 사다리">${lines}${labs}${lv}</svg>`;
+  leaves.forEach(([k, no]) => {
+    const t = k.split('/')[0], oy = rowOf(t), x = nx(k), isOn = pre.has(k) || on === no;
+    lines += `<path class="ln ${t}${isOn?' on':''}" d="M${x} ${bottom[k] + 4} V${oy + CY - 17}"/>`;
+    lv += `<g class="leaf ${t}${on===no?' on':''}" data-no="${no}"><circle cx="${x}" cy="${oy+CY}" r="15"/><text x="${x}" y="${oy+CY}">${no}</text></g>`;
+  });
+  return `<svg class="tree" viewBox="0 0 354 ${RH*2-6}" role="img" aria-label="chacha 12 WINES 사다리">${lines}${labs}${lv}</svg>`;
 }
+const CHACHA = `<div class="chhead"><div class="chb"><i></i>chacha<i></i></div><div class="chw">12 WINES<sup>(R)</sup></div><p>차차 12 와인 사다리타기는 와인을 크게 12가지 카테고리로 나눠서 <br>입맛과 취향에 맞춰 와인을 쉽게 고를 수 있도록 만들었습니다. <br>자신의 기호에 맞는 와인을 골라보세요.</p><small>Copyright © 2014 chacha. all right reserved.</small></div>`;
+const board = (hl, on, head, cls) => `<div class="ladboard${cls?' '+cls:''}">${head?CHACHA:''}${treeSvg(hl, on)}</div>`;
 const pathOf = no => (TREE.leaves.find(l => l[1] === no) || [''])[0];
 
 const flag = (w) => `<span class="flag"><i><b></b><b></b><b></b></i>${esc(w.country.toUpperCase())} · ${esc(w.region.toUpperCase())}</span>`;
@@ -151,7 +189,7 @@ function renderWine(id){
   <section class="sec reveal"><div class="k">12 LADDER</div><h2>와인 이름 몰라도 괜찮아요.<br>번호 하나만 기억하세요</h2>
     <p class="ladintro"><b>탭샵바 12 사다리</b>는 매장 와인을 맛에 따라 1번부터 12번까지 나눈 지도예요. <b>색 → 단맛 → 무게 → 향</b>, 사다리 타듯 내려가면 내 번호가 나와요.</p>
     <div class="ladcard"><div class="ladhead"><div class="ladno"><small>이 와인은</small>${w.ladder}</div><div class="what"><b>${esc(lad.ko)}</b><span>${esc(lad.en)}</span></div></div>
-    ${treeSvg(pathOf(w.ladder), w.ladder).replace('class="tree"','class="tree detail"')}${w.ladderWhy?`<div class="why"><div class="whyh">왜 ${w.ladder}번이냐면</div>${w.ladderWhy.map((x,i)=>`<div><i>${i+1}</i><span>${x}</span></div>`).join('')}</div>`:''}<div class="ladtip" id="ladtip"></div>
+    ${board(pathOf(w.ladder), w.ladder, true, 'detail')}${w.ladderWhy?`<div class="why"><div class="whyh">왜 ${w.ladder}번이냐면</div>${w.ladderWhy.map((x,i)=>`<div><i>${i+1}</i><span>${x}</span></div>`).join('')}</div>`:''}<div class="ladtip" id="ladtip"></div>
     <div class="ladsrc">다른 번호를 눌러 보세요.</div></div>
     <p class="muted s" style="margin-top:14px">${w.ladder}번이 좋았다면, 다음엔 "${w.ladder}번 와인 다른 거요" 라고만 말해 주세요.</p>
   </section>
@@ -258,10 +296,10 @@ function finder(){
   const box = $('#finder'); let path = [];
   const steps = {
     type:  { q:'오늘은 어떤 색?', o:[['red','레드'],['white','화이트'],['sparkling','스파클링','버블']] },
-    sweet: { q:'단맛은?', o:[['sweet','달콤하게'],['dry','안 달게','드라이']] },
-    body:  { q:'무게감은?', o:[['full','묵직하게'],['light','가볍게']] },
-    rfull: { q:'어떤 향이 끌려요?', o:[['aroma','잘 익은 과일','말벡·쉬라즈'],['bouquet','숙성된 향','오크·삼나무']] },
-    rlight:{ q:'어떤 향이 끌려요?', o:[['floral','꽃·체리','피노 느낌'],['savory','허브·후추','짭짤하게']] },
+    sweet: { q:'단맛은?', o:[['sweet','달콤','SWEET'],['dry','안달콤','DRY']] },
+    body:  { q:'무게감은?', o:[['full','무거운','FULL-BODIED'],['light','가벼운','LIGHT-BODIED']] },
+    rfull: { q:'어떤 향이 끌려요?', o:[['aroma','과일 꽃향기가 풍부한','AROMA'],['bouquet','과일향보다 오크숙성향이 두드러진','BOUQUET']] },
+    rlight:{ q:'어떤 향이 끌려요?', o:[['floral','이끼물풀향 딸기향 꽃향','MOSSY, GRASSY & FLORAL'],['savory','과일향보다 감칠맛 미네랄맛','SAVORY & MINERAL']] },
   };
   const resolve = p => {
     const [t,s,b,a] = p;
@@ -272,7 +310,7 @@ function finder(){
   const next = p => { if (!p.length) return 'type'; const [t,s,b] = p; if (p.length===1) return 'sweet'; if (t==='sparkling') return null; if (p.length===2) return 'body'; if (t==='red' && s==='dry' && p.length===3) return b==='full'?'rfull':'rlight'; return null; };
   const draw = () => {
     const no = resolve(path), st = next(path);
-    const rung = treeSvg(path.join('/'), no || 0);
+    const rung = board(path.join('/'), no || 0, !path.length || (no && !next(path)));
     if (no && !st){
       const x = L.find(y=>y.no===no), m = W.filter(w=>w.ladder===no);
       box.innerHTML = `<div class="fres"><div class="fstep">YOUR NUMBER</div>${rung}<div class="big">${no}</div><div class="lab">${x.ko}</div><div class="ex">${x.ex}</div>
@@ -281,7 +319,7 @@ function finder(){
       $('#fre').onclick = () => { path = []; draw(); }; log('nw-finder-'+no); return;
     }
     const S = steps[st];
-    box.innerHTML = `<div class="fpath">${path.map(v=>`<span>${({red:'레드',white:'화이트',sparkling:'스파클링',sweet:'달콤',dry:'드라이',full:'묵직',light:'가볍게',aroma:'과일향',bouquet:'숙성향',floral:'꽃향',savory:'짭짤'})[v]}</span>`).join('')}</div>
+    box.innerHTML = `<div class="fpath">${path.map(v=>`<span>${({red:'레드',white:'화이트',sparkling:'스파클링',sweet:'달콤',dry:'안달콤',full:'무거운',light:'가벼운',aroma:'AROMA',bouquet:'BOUQUET',floral:'FLORAL',savory:'SAVORY'})[v]}</span>`).join('')}</div>
       <div class="fstep">STEP ${path.length+1}</div><div class="fq">${S.q}</div>
       <div class="fopts${S.o.length===3?' three':''}">${S.o.map(([v,l,s])=>`<button data-v="${v}">${l}${s?`<small>${s}</small>`:''}</button>`).join('')}</div>${rung}
       ${path.length?'<button class="again" id="fback">← 뒤로</button>':''}`;
