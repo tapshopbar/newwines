@@ -331,3 +331,19 @@ body.light .navfoot .btn2{background:#fff}
 .psrc{font-size:12px}
 .warn{font-size:12px;opacity:.78}
 .chhead small{font-size:10.5px;color:rgba(237,229,225,.7)}
+
+/* 1101 정리: 라벨 줄이기·페이지 줄이기·카드 겹침 없애기 */
+.sec{padding:44px 22px}
+.sec.tight.sum{padding:26px 22px 30px}
+h3.sub{font-size:19px;font-weight:800;letter-spacing:-.02em;margin:34px 0 14px}
+.fold{padding-top:26px;padding-bottom:26px}
+.fold summary{list-style:none;cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:12px;font-size:22px;font-weight:800;letter-spacing:-.02em;line-height:1.3}
+.fold summary::-webkit-details-marker{display:none}
+.fold summary small{display:block;font-size:14px;font-weight:600;letter-spacing:0;color:var(--fg2);margin-top:4px}
+.fold summary::after{content:"+";flex:none;font-size:28px;font-weight:400;opacity:.55;transition:transform .2s}
+.fold details[open] summary::after{transform:rotate(45deg)}
+.fold .fbody{margin-top:22px}
+body.light .ladcard,body.light .finder{background:none;box-shadow:none;border:0;padding:0;border-radius:0}
+.ladcard .ladboard{margin:16px -10px 0}
+.finder .ladboard,.fres .ladboard{margin:14px -10px}
+@media (min-width:600px){.ladcard .ladboard,.finder .ladboard,.fres .ladboard{margin:16px 0}}

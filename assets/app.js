@@ -77,7 +77,7 @@ function treeSvg(hl, on){
     lines += `<path class="ln ${t}${isOn?' on':''}" d="M${x} ${bottom[k] + 4} V${oy + CY - 17}"/>`;
     lv += `<g class="leaf ${t}${on===no?' on':''}" data-no="${no}"><circle cx="${x}" cy="${oy+CY}" r="15"/><text x="${x}" y="${oy+CY}">${no}</text></g>`;
   });
-  return `<svg class="tree" viewBox="0 0 354 ${RH*2-6}" role="img" aria-label="chacha 12 WINES 사다리">${lines}${labs}${lv}</svg>`;
+  return `<svg class="tree" viewBox="0 0 354 ${RH*2-6}" role="img" aria-label="12 사다리">${lines}${labs}${lv}</svg>`;
 }
 const CHACHA = `<div class="chhead"><div class="chb"><i></i>chacha<i></i></div><div class="chw">12 WINES<sup>(R)</sup></div><p>차차 12 와인 사다리타기는 와인을 크게 12가지 카테고리로 나눠서 <br>입맛과 취향에 맞춰 와인을 쉽게 고를 수 있도록 만들었습니다. <br>자신의 기호에 맞는 와인을 골라보세요.</p><small>Copyright © 2014 chacha. all right reserved.</small></div>`;
 const board = (hl, on, head, cls) => `<div class="ladboard${cls?' '+cls:''}">${head?CHACHA:''}${treeSvg(hl, on)}</div>`;
@@ -186,40 +186,37 @@ function renderWine(id){
     ${w.price ? `<a class="price" href="#price">탭샵바 보틀 <b>${w.price.toLocaleString()}원</b> <span>와인숍보다 싸요 ↓</span></a>` : ''}
   </section>
 
+  <section class="sec tight reveal sum"><div class="ol">${w.oneLine.map((t,i)=>`<div><i>${i+1}</i><span>${esc(t)}</span></div>`).join('')}</div></section>
+
   <section class="sec reveal"><div class="k">12 LADDER</div><h2>와인 이름 몰라도 괜찮아요.<br>번호 하나만 기억하세요</h2>
-    <p class="ladintro"><b>탭샵바 12 사다리</b>는 매장 와인을 맛에 따라 1번부터 12번까지 나눈 지도예요. <b>색 → 단맛 → 무게 → 향</b>, 사다리 타듯 내려가면 내 번호가 나와요.</p>
+    <p class="ladintro"><b>12 사다리</b>는 와인을 맛에 따라 1번부터 12번까지 나눈 지도예요. 색, 단맛, 무게, 향 순서로 사다리 타듯 내려가면 내 번호가 나와요.</p>
     <div class="ladcard"><div class="ladhead"><div class="ladno"><small>이 와인은</small>${w.ladder}</div><div class="what"><b>${esc(lad.ko)}</b><span>${esc(lad.en)}</span></div></div>
     ${board(pathOf(w.ladder), w.ladder, true, 'detail')}${w.ladderWhy?`<div class="why"><div class="whyh">왜 ${w.ladder}번이냐면</div>${w.ladderWhy.map((x,i)=>`<div><i>${i+1}</i><span>${x}</span></div>`).join('')}</div>`:''}<div class="ladtip" id="ladtip"></div>
     <div class="ladsrc">다른 번호를 눌러 보세요.</div></div>
     <p class="muted s" style="margin-top:14px">${w.ladder}번이 좋았다면, 다음엔 "${w.ladder}번 와인 다른 거요" 라고만 말해 주세요.</p>
   </section>
 
-  <section class="sec reveal"><div class="k">IN 30 SECONDS</div><h2>한 줄로 말하면</h2>
-    <div class="ol">${w.oneLine.map((t,i)=>`<div><i>${i+1}</i><span>${esc(t)}</span></div>`).join('')}</div>
-  </section>
+  ${priceHtml(w)}
 
-  <section class="sec reveal"><div class="k">TASTE</div><h2>맛 지도</h2>
+  <section class="sec reveal"><h2>맛 지도</h2>
     <div class="bars">${Object.entries(w.taste).map(([k,v])=>`<div class="bar"><span>${k}</span><div class="t"><b data-w="${v/5*100}%"></b></div></div>`).join('')}</div>
     <div class="notes">${w.notes.map(n=>`<span>${esc(n)}</span>`).join('')}</div>
     <div class="serve">${esc(w.serve)} · ${esc(w.grapes)}</div>
-  </section>
-
-  <section class="sec reveal"><div class="k">STORY</div><h2>${esc(w.short)} 이야기</h2>
-    <div class="tl">${w.story.map(s=>`<div class="it"><div class="y">${esc(s.y)}</div><div class="t">${esc(s.t)}</div><div class="d">${esc(s.d)}</div></div>`).join('')}</div>
-  </section>
-
-  <section class="sec reveal"><div class="k">WATCH</div><h2>영상으로 보기</h2><div class="vids">${videoHtml(w.videos)}</div></section>
-
-  ${priceHtml(w)}
-  ${franceHtml(w)}
-
-  <section class="sec reveal"><div class="k">PAIRING</div><h2>뭐랑 마셔요?</h2>
+    <h3 class="sub">뭐랑 마셔요?</h3>
     <div class="pair">${w.pair.map(p=>`<div><b>${esc(p.k)}</b><span>${esc(p.d)}</span></div>`).join('')}</div>
   </section>
 
-  <section class="sec reveal"><div class="k">QUIZ</div><h2>3문제, 와인 박사 테스트</h2><div class="quiz" id="quiz"></div></section>
+  <section class="sec reveal"><h2>영상으로 보기</h2><div class="vids">${videoHtml(w.videos)}</div></section>
 
-  <section class="sec reveal faq"><div class="k">Q&amp;A</div><h2>자주 묻는 질문</h2>
+  ${franceHtml(w)}
+
+  <section class="sec reveal fold"><details><summary><span>${esc(w.short)} 이야기<small>${esc(w.story[0].y)}년부터 지금까지, ${w.story.length}장면</small></span></summary>
+    <div class="fbody"><div class="tl">${w.story.map(s=>`<div class="it"><div class="y">${esc(s.y)}</div><div class="t">${esc(s.t)}</div><div class="d">${esc(s.d)}</div></div>`).join('')}</div></div></details>
+  </section>
+
+  <section class="sec reveal fold"><details><summary><span>3문제, 와인 박사 테스트<small>눌러서 풀어 보기</small></span></summary><div class="fbody"><div class="quiz" id="quiz"></div></div></details></section>
+
+  <section class="sec reveal faq"><h2>자주 묻는 질문</h2>
     ${w.faq.map(f=>`<details><summary>${esc(f.q)}</summary><p>${esc(f.a)}</p></details>`).join('')}
   </section>
 
@@ -281,7 +278,7 @@ function renderHub(){
       <span class="tgo">보러 가기 →</span></a>`).join('')}</div>
   <div class="empty" id="empty">이 태그의 새 와인은 아직 없어요. 곧 들어와요.</div>
 
-  <section class="sec reveal" style="margin-top:34px"><div class="k">FIND YOUR NUMBER</div><h2>내 와인 번호 찾기</h2><p class="ladintro"><b>탭샵바 12 사다리</b>는 매장 와인을 맛에 따라 1~12번으로 나눈 지도예요. 질문 2~4개만 고르면 내 번호가 나와요. 와인 이름 몰라도, 번호만 말하면 돼요.</p>
+  <section class="sec reveal" style="margin-top:34px"><div class="k">FIND YOUR NUMBER</div><h2>내 와인 번호 찾기</h2><p class="ladintro"><b>12 사다리</b>는 와인을 맛에 따라 1~12번으로 나눈 지도예요. 질문 2~4개만 고르면 내 번호가 나와요. 와인 이름 몰라도, 번호만 말하면 돼요.</p>
     <div class="finder" id="finder"></div></section>
 
   ${ctaHtml(null)}
