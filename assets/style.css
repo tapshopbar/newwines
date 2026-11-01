@@ -321,3 +321,13 @@ body.light .navfoot .btn2{background:#fff}
 @media (min-width:600px){.ladboard{margin:14px 0 0;padding:22px 16px 14px}}
 .chhead p{word-break:keep-all}
 @media (max-width:599px){.chhead p br{display:none}.chhead p{font-size:12px;padding:0 6px}}
+
+/* 1101 디자인 점검(Impeccable 기준) 가독성 보정: 작은 글자 키우기, 회색 대비 4.5:1 이상 */
+.ladsrc{font-size:12px;color:#6b6468}
+.fstep{color:#6b6468}
+.fopts button small{color:#6b6468}
+.hero .facts span{font-size:12px;opacity:.82}
+.tflag{font-size:12px}
+.psrc{font-size:12px}
+.warn{font-size:12px;opacity:.78}
+.chhead small{font-size:10.5px;color:rgba(237,229,225,.7)}
